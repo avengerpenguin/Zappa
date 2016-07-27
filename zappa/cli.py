@@ -38,6 +38,7 @@ CUSTOM_SETTINGS = [
     'parameter_depth',
     'role_name',
     'touch',
+    'pack_cookies',
 ]
 
 CLI_COMMANDS = [
@@ -85,6 +86,7 @@ class ZappaCLI(object):
     use_apigateway = None
     lambda_handler = None
     django_settings = None
+    pack_cookies = None
 
     def handle(self, argv=None):
         """
@@ -596,6 +598,8 @@ class ZappaCLI(object):
             self.api_stage].get('aws_region', 'us-east-1')
         self.debug = self.zappa_settings[
             self.api_stage].get('debug', True)
+        self.pack_cookies = self.zappa_settings[
+            self.api_stage].get('pack_cookies', True)
         self.prebuild_script = self.zappa_settings[
             self.api_stage].get('prebuild_script', None)
         self.profile_name = self.zappa_settings[
@@ -679,6 +683,8 @@ class ZappaCLI(object):
                     settings_s = settings_s + "DOMAIN='{0!s}'\n".format((self.domain))
                 else:
                     settings_s = settings_s + "DOMAIN=None\n"
+
+                settings_s = settings_s + "PACK_COOKIES='{0!s}'\n".format((self.pack_cookies)) # Cast to Bool in handler
 
                 # Pass through remote config bucket and path
                 if self.remote_env_bucket and self.remote_env_file:

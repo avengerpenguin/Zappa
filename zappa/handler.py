@@ -162,8 +162,12 @@ class LambdaHandler(object):
                 # Get the Django WSGI app from our extension
                 app_function = get_django_wsgi(settings.DJANGO_SETTINGS)
                 trailing_slash = True
-                
-            app = ZappaWSGIMiddleware(app_function)
+
+            if not bool(settings.PACK_COOKIES)
+                app = ZappaWSGIMiddleware(app_function)
+            else:
+                app = app_function
+            #app = app_function
 
             # This is a normal HTTP request
             if event.get('method', None):
